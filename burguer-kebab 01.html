@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Burguer Kebab | Medina Sidonia</title>
+  <meta name="description" content="Burguer Kebab – C/Paseo del Mercado, 2 (Antiguo Bar Santa Rita). Reparto a domicilio todos los días de 20:00h a 00:00h. ☎ 623 332 819" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:        #F8F5F0;
+      --surface:   #FFFDF9;
+      --red:       #D94A38;
+      --amber:     #f0a500;
+      --text:      #2B2118;
+      --muted:     #6B6258;
+      --border:    rgba(240,165,0,.18);
+      --radius:    14px;
+      --font-head: 'Playfair Display', Georgia, serif;
+      --font-body: 'DM Sans', sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font-body); font-size: 16px; line-height: 1.65; overflow-x: hidden; }
+    img { max-width: 100%; display: block; }
+    a   { text-decoration: none; color: inherit; }
+    .container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+    .section    { padding: 96px 0; }
+    .tag { display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--amber); margin-bottom: 14px; }
+    .section-title { font-family: var(--font-head); font-size: clamp(2rem, 4.5vw, 3.2rem); line-height: 1.15; color: var(--text); margin-bottom: 18px; }
+    .section-sub { font-size: 1.05rem; color: var(--muted); max-width: 560px; }
+
+    /* Buttons */
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 32px; border-radius: 50px; font-family: var(--font-body); font-weight: 600; font-size: .95rem; cursor: pointer; border: none; transition: transform .2s, box-shadow .2s, background .2s; }
+    .btn-primary { background: var(--red); color: #fff; box-shadow: 0 4px 28px rgba(230,59,46,.35); }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 36px rgba(230,59,46,.5); }
+    .btn-outline { background: transparent; color: var(--text); border: 2px solid var(--border); }
+    .btn-outline:hover { border-color: var(--amber); color: var(--amber); transform: translateY(-2px); }
+    .btn-white { background: #fff; color: var(--red); font-weight: 700; }
+    .btn-white:hover { background: var(--amber); color: #fff; transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,.25); }
+
+    /* ── Header ── */
+    header { position: fixed; top: 0; left: 0; right: 0; z-index: 999; transition: background .3s, backdrop-filter .3s, box-shadow .3s; }
+    header.scrolled { background: #F8F5F0; backdrop-filter: blur(16px); box-shadow: 0 1px 0 var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 72px; }
+    .logo { display: flex; align-items: center; gap: 10px; font-family: var(--font-head); font-size: 1.35rem; font-weight: 900; color: var(--text); }
+    footer .logo { display: flex; align-items: center; gap: 10px; font-family: var(--font-head); font-size: 1.35rem; font-weight: 900; color: #ffffff; }
+    .logo-icon { width: 38px; height: 38px; background: var(--red); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+    .logo span { color: var(--amber); }
+    nav ul { display: flex; gap: 32px; list-style: none; }
+    nav ul li a { font-size: .9rem; font-weight: 500; color: var(--muted); transition: color .2s; position: relative; }
+    nav ul li a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: var(--amber); transition: width .25s; }
+    nav ul li a:hover { color: var(--text); }
+    nav ul li a:hover::after { width: 100%; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 6px; }
+    .hamburger span { display: block; width: 26px; height: 2px; background: var(--text); border-radius: 2px; transition: transform .3s, opacity .3s; }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .mobile-nav { display: none; flex-direction: column; background: rgba(15,13,10,.97); backdrop-filter: blur(20px); padding: 24px; gap: 20px; border-top: 1px solid var(--border); }
+    .mobile-nav a { font-size: 1.1rem; font-weight: 500; color: var(--muted); transition: color .2s; }
+    .mobile-nav a:hover { color: var(--amber); }
+    .mobile-nav.open { display: flex; }
+
+    /* ── Hero ── */
+    #inicio { min-height: 100vh; display: flex; align-items: center; position: relative; overflow: hidden; padding-top: 72px; }
+    #inicio::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 65% 50%, rgba(240,165,0,.08) 0%, transparent 70%), radial-gradient(ellipse 50% 70% at 10% 80%, rgba(230,59,46,.1) 0%, transparent 60%); }
+    .flame-orb { position: absolute; border-radius: 50%; filter: blur(80px); animation: drift 8s ease-in-out infinite alternate; }
+    .flame-orb-1 { width: 420px; height: 420px; background: rgba(230,59,46,.12); top: -80px; right: -60px; }
+    .flame-orb-2 { width: 280px; height: 280px; background: rgba(240,165,0,.10); bottom: 80px; right: 200px; animation-delay: 3s; }
+    @keyframes drift { from{transform:translate(0,0)scale(1)} to{transform:translate(30px,20px)scale(1.08)} }
+    .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; position: relative; z-index: 2; }
+    .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(240,165,0,.12); border: 1px solid rgba(240,165,0,.25); color: var(--amber); font-size: .8rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; padding: 6px 14px; border-radius: 50px; margin-bottom: 24px; }
+    .hero-title { font-family: var(--font-head); font-size: clamp(2.6rem,6vw,4.8rem); font-weight: 900; line-height: 1.06; margin-bottom: 22px; }
+    .hero-title em { font-style: normal; color: var(--red); position: relative; }
+    .hero-title em::after { content:''; position:absolute; bottom:4px; left:0; width:100%; height:3px; background:var(--amber); border-radius:2px; }
+    .hero-desc { font-size: 1.1rem; color: var(--muted); margin-bottom: 36px; max-width: 440px; }
+    .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+    .hero-stats { display: flex; gap: 32px; margin-top: 52px; flex-wrap: wrap; }
+    .stat { display: flex; flex-direction: column; }
+    .stat-num { font-family: var(--font-head); font-size: 2rem; font-weight: 900; color: var(--amber); line-height: 1; }
+    .stat-label { font-size: .8rem; color: var(--muted); margin-top: 4px; }
+    .hero-visual { position: relative; display: flex; align-items: center; justify-content: center; }
+    .hero-plate { width: 420px; height: 420px; border-radius: 50%; background: var(--surface); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+    .hero-plate-emoji { font-size: 9rem; filter: drop-shadow(0 20px 40px rgba(0,0,0,.6)); animation: float 4s ease-in-out infinite; }
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-14px)} }
+    .ring { position:absolute; border-radius:50%; border:1px dashed; animation:spin linear infinite; }
+    .ring-1 { width:480px;height:480px; border-color:rgba(240,165,0,.15); animation-duration:30s; }
+    .ring-2 { width:540px;height:540px; border-color:rgba(230,59,46,.10); animation-duration:20s; animation-direction:reverse; }
+    @keyframes spin { to{transform:rotate(360deg)} }
+    .chip { position:absolute; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:10px 16px; font-size:.8rem; font-weight:600; display:flex; align-items:center; gap:8px; box-shadow:0 8px 24px rgba(0,0,0,.4); animation:chipFloat 5s ease-in-out infinite alternate; }
+    .chip-1{top:60px;right:-20px;animation-delay:0s} .chip-2{bottom:80px;left:-30px;animation-delay:2s} .chip-3{top:50%;right:-50px;animation-delay:1s}
+    @keyframes chipFloat{from{transform:translateY(0)}to{transform:translateY(-10px)}}
+    .chip-dot{width:8px;height:8px;border-radius:50%;background:var(--red)} .chip-dot.amber{background:var(--amber)}
+
+    /* ── Menú con tabs ── */
+    #servicios { background: var(--surface); }
+    .menu-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 40px; border-bottom: 1px solid var(--border); padding-bottom: 0; }
+    .tab-btn { padding: 10px 20px; border-radius: 50px 50px 0 0; font-family: var(--font-body); font-size: .82rem; font-weight: 600; cursor: pointer; border: none; background: transparent; color: var(--muted); transition: color .2s, background .2s; border-bottom: 3px solid transparent; margin-bottom: -1px; }
+    .tab-btn:hover { color: var(--text); }
+    .tab-btn.active { color: var(--amber); border-bottom-color: var(--amber); background: rgba(240,165,0,.06); }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: grid; }
+    .menu-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .menu-grid-3 { grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .menu-item { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; display: flex; align-items: flex-start; gap: 12px; transition: border-color .25s, transform .25s, box-shadow .25s; }
+    .menu-item:hover { border-color: rgba(240,165,0,.4); transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,.35); }
+    .menu-num { min-width: 28px; height: 28px; border-radius: 50%; background: var(--red); color: #fff; font-size: .68rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+    .menu-info { flex: 1; }
+    .menu-name { font-weight: 600; font-size: .92rem; line-height: 1.25; margin-bottom: 3px; }
+    .menu-desc { font-size: .78rem; color: var(--muted); line-height: 1.4; }
+    .menu-price { text-align: right; flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+    .price-tag { background: rgba(240,165,0,.12); border: 1px solid rgba(240,165,0,.25); color: var(--amber); font-size: .78rem; font-weight: 700; padding: 3px 9px; border-radius: 20px; white-space: nowrap; }
+    .price-tag.red { background: rgba(230,59,46,.12); border-color: rgba(230,59,46,.3); color: #ff7b72; }
+    .extras-bar { margin-top: 24px; padding: 16px 24px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); display: flex; flex-wrap: wrap; gap: 20px; align-items: center; }
+    .extra-pill { display: flex; align-items: center; gap: 8px; font-size: .85rem; color: var(--muted); }
+    .extra-pill strong { color: var(--amber); }
+
+    /* ── Sobre nosotros ── */
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .about-img-main { width: 100%; aspect-ratio: 100%; background: var(--surface); border-radius: 20px; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 7rem; overflow: hidden; position: relative; }
+    .about-img-main::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg,transparent 40%,rgba(15,13,10,.8)); }
+    .values { display: flex; flex-direction: column; gap: 18px; margin-top: 36px; }
+    .value-row { display: flex; align-items: flex-start; gap: 16px; }
+    .value-icon { width:40px;height:40px;flex-shrink:0;background:rgba(240,165,0,.1);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem; }
+    .value-info strong { display:block;font-size:.95rem;margin-bottom:2px; }
+    .value-info p { font-size:.85rem;color:var(--muted); }
+
+    /* ── Testimonios ── */
+    #testimonios { background: var(--surface); }
+    .testimonios-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+    .testi-card { background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:28px;transition:border-color .3s; }
+    .testi-card:hover { border-color: rgba(240,165,0,.35); }
+    .stars { color:var(--amber);font-size:1rem;margin-bottom:14px;letter-spacing:3px; }
+    .testi-text { font-size:.92rem;color:var(--muted);line-height:1.7;margin-bottom:20px; }
+    .testi-author { display:flex;align-items:center;gap:12px; }
+    .avatar { width:42px;height:42px;border-radius:50%;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1.2rem; }
+    .author-name { font-weight:600;font-size:.9rem; }
+    .author-loc  { font-size:.78rem;color:var(--muted); }
+
+    /* ── CTA ── */
+    .cta-section { background:linear-gradient(135deg,var(--red) 0%,#b52a1f 100%);padding:80px 0;text-align:center;position:relative;overflow:hidden; }
+    .cta-section::before { content:'🔥';position:absolute;font-size:18rem;opacity:.05;top:-40px;right:-40px;line-height:1; }
+    .cta-section .section-title { color:#fff; }
+    .cta-section .section-sub { color:rgba(255,255,255,.75);margin:0 auto 36px; }
+
+    /* ── Contacto ── */
+    .contact-grid { display:grid;grid-template-columns:1fr 1.3fr;gap:80px;align-items:start; }
+    .info-item { display:flex;align-items:flex-start;gap:14px;margin-bottom:22px; }
+    .info-icon { width:44px;height:44px;flex-shrink:0;background:var(--surface);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem; }
+    .info-label { font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em; }
+    .info-val { font-size:.95rem;font-weight:500; }
+    .form-box { background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:40px; }
+    .form-group { margin-bottom:20px; }
+    .form-label { display:block;font-size:.8rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:8px; }
+    .form-input { width:100%;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px 16px;font-family:var(--font-body);font-size:.95rem;color:var(--text);transition:border-color .2s;resize:vertical; }
+    .form-input:focus { outline:none;border-color:var(--amber); }
+    .form-input::placeholder { color:var(--muted); }
+    textarea.form-input { min-height:130px; }
+    .form-row { display:grid;grid-template-columns:1fr 1fr;gap:16px; }
+    .form-success { display:none;text-align:center;padding:40px 20px; }
+    .form-success .check { font-size:3rem; }
+    .form-success h4 { font-family:var(--font-head);font-size:1.4rem;margin:12px 0 8px; }
+    .form-success p { color:var(--muted); }
+
+    /* ── Footer ── */
+    footer { background:#111111;border-top:1px solid var(--border);padding:64px 0 32px; }
+    .footer-grid { display:grid;grid-template-columns:2fr 1fr 1fr 1.5fr;gap:48px;margin-bottom:56px; }
+    .footer-brand p { color:var(--muted);font-size:.88rem;margin:18px 0 24px;max-width:260px; }
+    .social-links { display:flex;gap:10px; }
+    .social-btn { width:38px;height:38px;border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;transition:border-color .2s,background .2s; }
+    .social-btn:hover { border-color:var(--amber);background:rgba(240,165,0,.08); }
+    .footer-col h4 { font-size:.8rem;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--amber);margin-bottom:18px; }
+    .footer-col ul { list-style:none;display:flex;flex-direction:column;gap:10px; }
+    .footer-col ul li a { font-size:.88rem;color:var(--muted);transition:color .2s; }
+    .footer-col ul li a:hover { color:var(--text); }
+    .footer-bottom { border-top:1px solid var(--border);padding-top:28px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px; }
+    .footer-bottom p { font-size:.82rem;color:var(--muted); }
+
+    /* ── Reveal ── */
+    .reveal { opacity:0;transform:translateY(32px);transition:opacity .65s ease,transform .65s ease; }
+    .reveal.visible { opacity:1;transform:none; }
+    .reveal:nth-child(1){transition-delay:0s} .reveal:nth-child(2){transition-delay:.08s} .reveal:nth-child(3){transition-delay:.16s}
+    .reveal:nth-child(4){transition-delay:.24s} .reveal:nth-child(5){transition-delay:.32s} .reveal:nth-child(6){transition-delay:.4s}
+
+    /* ── Responsive ── */
+    @media(max-width:960px){
+      .hero-grid,.about-grid,.contact-grid{grid-template-columns:1fr;gap:48px}
+      .hero-visual{display:none}
+      .menu-grid,.menu-grid-3{grid-template-columns:1fr 1fr}
+      .testimonios-grid{grid-template-columns:1fr 1fr}
+      .footer-grid{grid-template-columns:1fr 1fr}
+    }
+    @media(max-width:640px){
+      .section{padding:72px 0}
+      nav ul{display:none} .hamburger{display:flex}
+      .menu-grid,.menu-grid-3,.testimonios-grid{grid-template-columns:1fr}
+      .footer-grid{grid-template-columns:1fr}
+      .form-row{grid-template-columns:1fr}
+      .hero-stats{gap:20px} .hero-btns{flex-direction:column}
+      .hero-btns .btn{width:100%;justify-content:center}
+      .tab-btn{padding:8px 12px;font-size:.75rem}
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header id="header">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="#inicio" class="logo">
+        <div class="logo-icon">🌯</div>
+        Burguer <span>Kebab</span>
+      </a>
+      <nav>
+        <ul>
+          <li><a href="#inicio">Inicio</a></li>
+          <li><a href="#servicios">Menú</a></li>
+          <li><a href="#nosotros">Sobre Nosotros</a></li>
+          <li><a href="#contacto">Contacto</a></li>
+        </ul>
+      </nav>
+      <div style="display:flex;gap:12px;align-items:center;">
+        <a href="tel:+34623332819" class="btn btn-primary" style="padding:10px 22px;font-size:.85rem;">📞 623 332 819</a>
+        <button class="hamburger" id="hamburger" aria-label="Menú"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+    <div class="mobile-nav" id="mobileNav">
+      <a href="#inicio" onclick="closeMobile()">Inicio</a>
+      <a href="#servicios" onclick="closeMobile()">Menú</a>
+      <a href="#nosotros" onclick="closeMobile()">Sobre Nosotros</a>
+      <a href="#testimonios" onclick="closeMobile()">Opiniones</a>
+      <a href="#contacto" onclick="closeMobile()">Contacto</a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section id="inicio">
+  <div class="flame-orb flame-orb-1"></div>
+  <div class="flame-orb flame-orb-2"></div>
+  <div class="container">
+    <div class="hero-grid">
+      <div class="hero-text">
+        <div class="hero-badge">🔥 Reparto a domicilio · Todos los días</div>
+        <h1 class="hero-title">El kebab que<br><em>enamora</em> a<br>Medina Sidonia</h1>
+        <p class="hero-desc">Döner kebab, hamburguesas, baguettes y mucho más. Carne asada al momento, ingredientes frescos y reparto a domicilio todas las noches desde las 20h.</p>
+        <div class="hero-btns">
+          <a href="tel:+34623332819" class="btn btn-primary">📞 Llamar y pedir</a>
+          <a href="#servicios" class="btn btn-outline">Ver la carta →</a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat"><span class="stat-num">+5K</span><span class="stat-label">Clientes felices</span></div>
+          <div class="stat"><span class="stat-num">44</span><span class="stat-label">Platos en carta</span></div>
+          <div class="stat"><span class="stat-num">⭐ 4.9</span><span class="stat-label">Valoración media</span></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="ring ring-1"></div>
+        <div class="ring ring-2"></div>
+        <div class="hero-plate"><span class="hero-plate-emoji">🌯</span></div>
+        <div class="chip chip-1"><div class="chip-dot"></div>Recién hecho</div>
+        <div class="chip chip-2"><div class="chip-dot amber"></div>Reparto a domicilio</div>
+        <div class="chip chip-3"><div class="chip-dot"></div>Desde 3 €</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MENÚ -->
+<section id="servicios" class="section">
+  <div class="container">
+    <div class="reveal" style="margin-bottom:40px;">
+      <span class="tag">Nuestra carta</span>
+      <h2 class="section-title">Todo lo que necesitas<br>para saciarte</h2>
+      <p class="section-sub">Elaborado a diario con productos frescos · Reparto a domicilio todos los días de 20:00h a 00:00h</p>
+    </div>
+
+    <div class="menu-tabs" id="menuTabs">
+      <button class="tab-btn active" data-tab="kebabs">🌯 Kebabs & Rollos</button>
+      <button class="tab-btn" data-tab="menus">🍟 Menús</button>
+      <button class="tab-btn" data-tab="hamburguesas">🍔 Hamburguesas</button>
+      <button class="tab-btn" data-tab="baguettes">🥖 Baguettes & Sándwich</button>
+      <button class="tab-btn" data-tab="guarniciones">🥔 Guarniciones</button>
+    </div>
+
+    <!-- Kebabs & Rollos -->
+    <div class="tab-panel active menu-grid" id="tab-kebabs">
+      <div class="menu-item reveal"><div class="menu-num">1</div><div class="menu-info"><div class="menu-name">Döner Kebab</div><div class="menu-desc">Pollo, ternera o mixto · verdura y salsa</div></div><div class="menu-price"><span class="price-tag">5 €</span></div></div>
+      <div class="menu-item reveal"><div class="menu-num">2</div><div class="menu-info"><div class="menu-name">Rollo Grande</div><div class="menu-desc">Pollo, ternera o mixto · verdura y salsa</div></div><div class="menu-price"><span class="price-tag">5 €</span></div></div>
+      <div class="menu-item reveal"><div class="menu-num">3</div><div class="menu-info"><div class="menu-name">Rollo Pequeño</div><div class="menu-desc">Pollo, ternera o mixto · verdura y salsa</div></div><div class="menu-price"><span class="price-tag">4 €</span></div></div>
+      <div class="menu-item reveal"><div class="menu-num">4</div><div class="menu-info"><div class="menu-name">Pizza Turca</div><div class="menu-desc">Pollo, ternera o mixto · verdura y salsa</div></div><div class="menu-price"><span class="price-tag">6 €</span></div></div>
+      <div class="menu-item reveal"><div class="menu-num">5</div><div class="menu-info"><div class="menu-name">Falafel</div><div class="menu-desc">Croqueta de garbanzo · verdura y salsa</div></div><div class="menu-price"><span class="price-tag">4 €</span></div></div>
+      <div class="menu-item reveal"><div class="menu-num">11</div><div class="menu-info"><div class="menu-name">Plato Kebab con Patatas</div><div class="menu-desc">Pollo, ternera o mixto · verdura, salsa y patatas fritas</div></div><div class="menu-price"><span class="price-tag">7,5 €</span></div></div>
+      <div class="menu-item reveal"><div class="menu-num">12</div><div class="menu-info"><div class="menu-name">Plato Kebab con Arroz</div><div class="menu-desc">Pollo, ternera o mixto · verdura, salsa y arroz</div></div><div class="menu-price"><span class="price-tag">8,5 €</span></div></div>
+      <div class="menu-item reveal"><div class="menu-num">15</div><div class="menu-info"><div class="menu-name">Arroz con Carne y Salsa</div><div class="menu-desc">Arroz con carne de kebab y salsa de la casa</div></div><div class="menu-price"><span class="price-tag">5,5 €</span></div></div>
+    </div>
+
+    <!-- Menús -->
+    <div class="tab-panel menu-grid" id="tab-menus">
+      <div class="menu-item reveal"><div class="menu-num">6</div><div class="menu-info"><div class="menu-name">Menú Döner Kebab</div><div class="menu-desc">Pollo, ternera o mixto · verdura y salsa · patatas y bebida</div></div><div class="menu-price"><span class="price-tag">7,5 €</span></div></div>
+      <div class="menu-item reveal"><div class="menu-num">7</div><div class="menu-info"><div class="menu-name">Menú Rollo Grande</div><div class="menu-desc">Pollo, ternera o mixto · verdura y salsa · patatas y bebida</div></div><div class="menu-price"><span class="price-tag">7,5 €</span></div></div>
+      <div class="menu-item reveal"><div class="menu-num">8</div><div class="menu-info"><div class="menu-name">Menú Rollo Pequeño</div><div class="menu-desc">Pollo, ternera o mixto · verdura y salsa · patatas y bebida</div></div><div class="menu-price"><span class="price-tag">6,5 €</span></div></div>
+      <div class="menu-item reveal"><div class="menu-num">9</div><div class="menu-info"><div class="menu-name">Menú Pizza Turca</div><div class="menu-desc">Pollo, ternera o mixto · verdura, salsa · patatas y bebida</div></div><div class="menu-price"><span class="price-tag">8,5 €</span></div></div>
+      <div class="menu-item reveal"><div class="menu-num">10</div><div class="menu-info"><div class="menu-name">Menú Falafel</div><div class="menu-desc">Croqueta de garbanzo · patatas y bebida</div></div><div class="menu-price"><span class="price-tag">6,5 €</span></div></div>
+      <div class="menu-item reveal"><div class="menu-num">28</div><div class="menu-info"><div class="menu-name">Menú Hamburguesa Pollo</div><div class="menu-desc">Huevo, queso y bacon · patatas y bebida</div></div><div class="menu-price"><span class="price-tag">Simple 6 €</span><span class="price-tag red">Completa 7 €</span></div></div>
+      <div class="menu-item reveal"><div class="menu-num">29</div><div class="menu-info"><div class="menu-name">Menú Hamburguesa Ternera 100%</div><div class="menu-desc">Huevo, queso y bacon · patatas y bebida</div></div><div class="menu-price"><span class="price-tag">Simple 7 €</span><span class="price-tag red">Completa 8 €</span></div></div>
+      <div class="menu-item reveal"><div class="menu-num">30</div><div class="menu-info"><div class="menu-name">Menú Hamburguesa Pinchito</div><div class="menu-desc">Huevo, queso y bacon · patatas y bebida</div></div><div class="menu-price"><span class="price-tag">Simple 7 €</span><span class="price-tag red">Completa 8 €</span></div></div>
+      <div class="menu-item reveal"><div class="menu-num">33</div><div class="menu-info"><div class="menu-name">Menú Hamburguesa Barbacoa</div><div class="menu-desc">Huevo, queso y bacon · patatas y bebida</div></div><div class="menu-price"><span class="price-tag">Simple 7 €</span><span class="price-tag red">Completa 8 €</span></div></div>
+      <div class="menu-item reveal"><div class="menu-num">34</div><div class="menu-info"><div class="menu-name">Menú Hamburguesa Retinto</div><div class="menu-desc">Huevo, queso y bacon · patatas y bebida</div></div><div class="menu-price"><span class="price-tag">Simple 8,5 €</span><span class="price-tag red">Completa 9,5 €</span></div></div>
+      <div class="menu-item reveal"><div class="menu-num">35</div><div class="menu-info"><div class="menu-name">Menú Hamburguesa Ibérica</div><div class="menu-desc">Huevo, queso y bacon · patatas y bebida</div></div><div class="menu-price"><span class="price-tag">Simple 8 €</span><span class="price-tag red">Completa 9 €</span></div></div>
+    </div>
+
+    <!-- Hamburguesas -->
+    <div class="tab-panel menu-grid" id="tab-hamburguesas">
+      <div class="menu-item reveal"><div class="menu-num">20</div><div class="menu-info"><div class="menu-name">Hamburguesa Pollo</div><div class="menu-desc">Huevo, queso y bacon</div></div><div class="menu-price"><span class="price-tag">Simple 4 €</span><span class="price-tag red">Completa 5 €</span></div></div>
+      <div class="menu-item reveal"><div class="menu-num">21</div><div class="menu-info"><div class="menu-name">Hamburguesa Ternera 100%</div><div class="menu-desc">Huevo, queso y bacon</div></div><div class="menu-price"><span class="price-tag">Simple 5 €</span><span class="price-tag red">Completa 6 €</span></div></div>
+      <div class="menu-item reveal"><div class="menu-num">22</div><div class="menu-info"><div class="menu-name">Hamburguesa Pinchito</div><div class="menu-desc">Huevo, queso y bacon</div></div><div class="menu-price"><span class="price-tag">Simple 5 €</span><span class="price-tag red">Completa 6 €</span></div></div>
+      <div class="menu-item reveal"><div class="menu-num">25</div><div class="menu-info"><div class="menu-name">Hamburguesa Barbacoa</div><div class="menu-desc">Huevo, queso y bacon</div></div><div class="menu-price"><span class="price-tag">Simple 5 €</span><span class="price-tag red">Completa 6 €</span></div></div>
+      <div class="menu-item reveal"><div class="menu-num">26</div><div class="menu-info"><div class="menu-name">Hamburguesa Retinto</div><div class="menu-desc">Huevo, queso y bacon</div></div><div class="menu-price"><span class="price-tag">Simple 6,5 €</span><span class="price-tag red">Completa 7,5 €</span></div></div>
+      <div class="menu-item reveal"><div class="menu-num">27</div><div class="menu-info"><div class="menu-name">Hamburguesa Ibérica</div><div class="menu-desc">Huevo, queso y bacon</div></div><div class="menu-price"><span class="price-tag">Simple 6 €</span><span class="price-tag red">Completa 7 €</span></div></div>
+    </div>
+
+    <!-- Baguettes & Sándwich -->
+    <div class="tab-panel menu-grid" id="tab-baguettes">
+      <div class="menu-item reveal"><div class="menu-num">36</div><div class="menu-info"><div class="menu-name">Baguette Pollo</div></div><div class="menu-price"><span class="price-tag">Simple 4 €</span><span class="price-tag red">Completa 5 €</span></div></div>
+      <div class="menu-item reveal"><div class="menu-num">37</div><div class="menu-info"><div class="menu-name">Baguette Lomo</div></div><div class="menu-price"><span class="price-tag">Simple 4 €</span><span class="price-tag red">Completa 5 €</span></div></div>
+      <div class="menu-item reveal"><div class="menu-num">38</div><div class="menu-info"><div class="menu-name">Baguette de Lomo Adobado</div></div><div class="menu-price"><span class="price-tag">Simple 4 €</span><span class="price-tag red">Completa 5 €</span></div></div>
+      <div class="menu-item reveal"><div class="menu-num">39</div><div class="menu-info"><div class="menu-name">Baguette Tortilla de Patata</div><div class="menu-desc">Con mayonesa o alioli</div></div><div class="menu-price"><span class="price-tag">4 €</span></div></div>
+      <div class="menu-item reveal"><div class="menu-num">40</div><div class="menu-info"><div class="menu-name">Baguette Tortilla Francesa</div><div class="menu-desc">Con tomate</div></div><div class="menu-price"><span class="price-tag">3,5 €</span></div></div>
+      <div class="menu-item reveal"><div class="menu-num">41</div><div class="menu-info"><div class="menu-name">Baguette Carne Kebab</div><div class="menu-desc">Pollo o ternera</div></div><div class="menu-price"><span class="price-tag">Simple 4 €</span><span class="price-tag red">Completa 5 €</span></div></div>
+      <div class="menu-item reveal"><div class="menu-num">42</div><div class="menu-info"><div class="menu-name">Baguette Serranito</div><div class="menu-desc">Lomo fresco, pimiento y jamón</div></div><div class="menu-price"><span class="price-tag">5 €</span></div></div>
+      <div class="menu-item reveal"><div class="menu-num">43</div><div class="menu-info"><div class="menu-name">Sándwich de Pollo Completo</div><div class="menu-desc">Lechuga, cebolla y mayonesa · huevo, queso y bacon</div></div><div class="menu-price"><span class="price-tag">5 €</span></div></div>
+      <div class="menu-item reveal"><div class="menu-num">44</div><div class="menu-info"><div class="menu-name">Sándwich de Kebab Completo</div><div class="menu-desc">Ternera o pollo · lechuga, tomate, cebolla · huevo, queso y bacon</div></div><div class="menu-price"><span class="price-tag">5 €</span></div></div>
+    </div>
+
+    <!-- Guarniciones -->
+    <div class="tab-panel menu-grid menu-grid-3" id="tab-guarniciones">
+      <div class="menu-item reveal"><div class="menu-num">13</div><div class="menu-info"><div class="menu-name">Patatas Fritas con Salsa</div></div><div class="menu-price"><span class="price-tag">Pequeña 2,5 €</span><span class="price-tag red">Grande 3,5 €</span></div></div>
+      <div class="menu-item reveal"><div class="menu-num">14</div><div class="menu-info"><div class="menu-name">Patatas Fritas con Carne</div><div class="menu-desc">Pollo, ternera o mixto</div></div><div class="menu-price"><span class="price-tag">Pequeña 4 €</span><span class="price-tag red">Grande 5,5 €</span></div></div>
+      <div class="menu-item reveal"><div class="menu-num">16</div><div class="menu-info"><div class="menu-name">Aros de Cebolla</div></div><div class="menu-price"><span class="price-tag">7 ud. 3 €</span><span class="price-tag red">14 ud. 5,5 €</span></div></div>
+      <div class="menu-item reveal"><div class="menu-num">17</div><div class="menu-info"><div class="menu-name">Nuggets con Patatas Fritas</div></div><div class="menu-price"><span class="price-tag">7 ud. 4 €</span><span class="price-tag red">14 ud. 7 €</span></div></div>
+      <div class="menu-item reveal"><div class="menu-num">18</div><div class="menu-info"><div class="menu-name">Alitas de Pollo Picantes</div></div><div class="menu-price"><span class="price-tag">5 ud. · 4 €</span></div></div>
+      <div class="menu-item reveal"><div class="menu-num">19</div><div class="menu-info"><div class="menu-name">Frankfurt</div><div class="menu-desc">Con ketchup y mostaza</div></div><div class="menu-price"><span class="price-tag">3 €</span></div></div>
+      <div class="menu-item reveal"><div class="menu-num">23</div><div class="menu-info"><div class="menu-name">Patatas Deluxe con Salsa</div></div><div class="menu-price"><span class="price-tag">3,5 €</span></div></div>
+      <div class="menu-item reveal"><div class="menu-num">24</div><div class="menu-info"><div class="menu-name">Patatas Deluxe con Carne y Salsa</div></div><div class="menu-price"><span class="price-tag">6,5 €</span></div></div>
+      <div class="menu-item reveal"><div class="menu-num">31</div><div class="menu-info"><div class="menu-name">Patatas Deluxe con Queso</div></div><div class="menu-price"><span class="price-tag">6,5 €</span></div></div>
+      <div class="menu-item reveal"><div class="menu-num">32</div><div class="menu-info"><div class="menu-name">Patatas con Bacon y Queso</div></div><div class="menu-price"><span class="price-tag">4,5 €</span></div></div>
+    </div>
+
+    <div class="extras-bar reveal">
+      <div class="extra-pill">💧 Agua grande <strong>1,5 €</strong></div>
+      <div class="extra-pill">💧 Agua pequeña <strong>1 €</strong></div>
+      <div class="extra-pill">🥔 Extra patatas <strong>1 €</strong></div>
+      <div class="extra-pill">🥩 Extra carne <strong>1,5 €</strong></div>
+      <div class="extra-pill">🛵 Reparto a domicilio <strong>1,5 €</strong></div>
+    </div>
+  </div>
+</section>
+
+<!-- SOBRE NOSOTROS -->
+<section id="nosotros" class="section">
+  <div class="container">
+    <div class="about-grid">
+      <div style="position:relative;" class="reveal">
+        <div class="about-img-main"><img src="fotoburguerkebab.png" alt="Descripción de la imagen"></div>
+
+      </div>
+      <div class="reveal">
+        <span class="tag">Sobre nosotros</span>
+        <h2 class="section-title">Pasión por la cocina,<br>raíces en Medina</h2>
+        <p class="section-sub" style="max-width:100%;margin-bottom:0;">
+          En Burguer Kebab queremos ofrecer mucho más que comida rápida: queremos que disfrutes de un kebab artesanal, preparado al momento y con ingredientes de calidad. Nos encontrarás en <strong>C/Paseo del Mercado, 2 (Antiguo Bar Santa Rita)</strong>, en Medina Sidonia.
+        </p>
+        <div class="values">
+          <div class="value-row"><div class="value-icon">🛵</div><div class="value-info"><strong>Reparto a domicilio de martes a domingo</strong><p>Te llevamos el pedido a casa de 20:00h a 00:00h. Solo 1,5 € de envío.</p></div></div>
+          <div class="value-row"><div class="value-icon">🤝</div><div class="value-info"><strong>Trato cercano y familiar</strong><p>Te conocemos por tu nombre y sabemos lo que te gusta.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIOS -->
+<section id="testimonios" class="section">
+  <div class="container">
+    <div class="reveal" style="margin-bottom:56px;">
+      <span class="tag">Opiniones</span>
+      <h2 class="section-title">Lo que dice<br>nuestra gente</h2>
+    </div>
+    <div class="testimonios-grid">
+      <div class="testi-card reveal">
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">Ni caso a las malas reseñas. Es un sitio cuyos propietarios son muy amables, la comida muy rica y de buena calidad y se puede estar la mar de tranquilo 😊🙌que eso yo lo valoro mucho. Por ejemplo, lo de la foto es un baguette de kebab completo, con queso, lechuga, salsa y huevo más la bebida todo por 6,50 .</p>
+        <div class="testi-author"><div class="avatar">👩</div><div><div class="author-name">Mar G q</div><div class="author-loc">Medina Sidonia</div></div></div>
+      </div>
+      <div class="testi-card reveal">
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">La comida está buenísima, las papas con carne kebab y el arroz espectaculares. La salsa es una maravilla y el trato al cliente un 10. Un sitio súper recomendable.</p>
+        <div class="testi-author"><div class="avatar">👩</div><div><div class="author-name">Ana Román Ortega</div><div class="author-loc">Medina Sidonia</div></div></div>
+      </div>
+      <div class="testi-card reveal">
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">Fui por primera vez y me pareció brutal. Buena cantidad, muy buen precio y la salsa me gustó muchísimo. Muy buena atención al cliente, volveré 100%.</p>
+        <div class="testi-author"><div class="avatar">🧑</div><div><div class="author-name">Luis Miguel Martínez Garcia</div><div class="author-loc">Vejer de la Frontera</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container" style="position:relative;z-index:2;">
+    <h2 class="section-title">¿Con hambre?<br>Nosotros te lo solucionamos</h2>
+    <p class="section-sub">Llámanos y te llevamos el pedido a casa. Reparto a domicilio de martes a domingo de 20:00h a 00:00h.</p>
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:32px;">
+      <a href="tel:+34623332819" class="btn btn-white">📞 623 332 819</a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section id="contacto" class="section">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="reveal">
+        <span class="tag">Contacto</span>
+      <h2 class="section-title">¿Quieres hacer<br>un pedido?</h2>
+        <p style="color:var(--muted);margin-bottom:36px;font-size:.95rem;">Los pedidos se realizan por teléfono. Llámanos y te atendemos al momento.</p>
+        <div class="info-item"><div class="info-icon">📍</div><div><div class="info-label">Dirección</div><div class="info-val">C/Paseo del Mercado, 2<br>Antiguo Bar Santa Rita · Medina Sidonia, Cádiz</div></div></div>
+        <div class="info-item"><div class="info-icon">📞</div><div><div class="info-label">Teléfono</div><div class="info-val"><a href="tel:+34623332819" style="color:var(--amber);">623 332 819</a></div></div></div>
+        <div class="info-item"><div class="info-icon">🕐</div><div><div class="info-label">Horario</div><div class="info-val">De martes a domingo · 20:00h – 00:00h</div></div></div>
+        <div class="info-item"><div class="info-icon">📸</div><div><div class="info-label">Instagram</div><div class="info-val"><a href="https://instagram.com/burguerkebab" target="_blank" style="color:var(--amber);">@burguerkebab</a></div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#inicio" class="logo"><div class="logo-icon">🌯</div>Burguer <span>Kebab</span></a>
+        <p>C/Paseo del Mercado, 2 (Antiguo Bar Santa Rita) · Medina Sidonia, Cádiz. Reparto a domicilio todos los días de 20:00h a 00:00h.</p>
+        <div class="social-links">
+          <a href="https://instagram.com/burguerkebab" target="_blank" class="social-btn" aria-label="Instagram">📸</a>
+          <a href="tel:+34623332819" target="_blank" class="social-btn" aria-label="Teléfono">📞</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Carta</h4>
+        <ul>
+          <li><a href="#servicios">Kebabs & Rollos</a></li>
+          <li><a href="#servicios">Menús</a></li>
+          <li><a href="#servicios">Hamburguesas</a></li>
+          <li><a href="#servicios">Baguettes & Sándwich</a></li>
+          <li><a href="#servicios">Guarniciones</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Negocio</h4>
+        <ul>
+          <li><a href="#nosotros">Sobre nosotros</a></li>
+          <li><a href="#testimonios">Opiniones</a></li>
+          <li><a href="#contacto">Contacto</a></li>
+          <li><a href="#">Aviso legal</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Visítanos</h4>
+        <ul>
+          <li><a href="#">📍 C/Paseo del Mercado, 2</a></li>
+          <li><a href="#">🏠 Antiguo Bar Santa Rita</a></li>
+          <li><a href="tel:+34623332819">📞 623 332 819</a></li>
+          <li><a href="#">🕐 20:00h – 00:00h · De martes a domingo</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Burguer Kebab · Medina Sidonia. Todos los derechos reservados.</p>
+      <p>Hecho con ❤️ en Andalucía</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Header scroll
+  const header = document.getElementById('header');
+  window.addEventListener('scroll', () => header.classList.toggle('scrolled', window.scrollY > 40));
+
+  // Hamburger
+  const hamburger = document.getElementById('hamburger');
+  const mobileNav = document.getElementById('mobileNav');
+  hamburger.addEventListener('click', () => { hamburger.classList.toggle('open'); mobileNav.classList.toggle('open'); });
+  function closeMobile() { hamburger.classList.remove('open'); mobileNav.classList.remove('open'); }
+
+  // Scroll reveal
+  const revealObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revealObserver.unobserve(e.target); } });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+  // Menu tabs
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      const panel = document.getElementById('tab-' + btn.dataset.tab);
+      panel.classList.add('active');
+      panel.querySelectorAll('.reveal:not(.visible)').forEach(el => revealObserver.observe(el));
+    });
+  });
+
+  // Contact form
+  const form = document.getElementById('contactForm');
+  const success = document.getElementById('formSuccess');
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    form.style.cssText = 'opacity:0;transform:scale(.96);transition:.35s';
+    setTimeout(() => { form.style.display = 'none'; success.style.display = 'block'; }, 380);
+  });
+
+  // Active nav
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('nav ul li a');
+  window.addEventListener('scroll', () => {
+    let cur = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) cur = s.id; });
+    navLinks.forEach(a => { a.style.color = a.getAttribute('href') === '#' + cur ? 'var(--text)' : ''; });
+  });
+</script>
+</body>
+</html>
